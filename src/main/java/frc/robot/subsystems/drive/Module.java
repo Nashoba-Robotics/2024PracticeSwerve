@@ -196,6 +196,9 @@ public class Module {
         return NRUnits.constrainRad(getTurnPosition() * Constants.TAU);
     }
 
+    public double getTurnVelocity(){
+        return inputs.turnVelocity;
+    }
     // RADIANS
     public boolean atTargetAngle(double targetAngle){
         double deadzone = Constants.TAU/12;
@@ -241,4 +244,23 @@ public class Module {
         io.assignTurnPosition(NRUnits.Drive.degToNU(inputs.turnAbsolutePosition*360));
     }
 
+    public void setkF(double kF){
+        io.setkF(kF);
+    }
+    public void setkP(double kP){
+        io.setkP(kP);
+    }
+    public void setkD(double kD){
+        io.setkD(kD);
+    }
+
+    public void setDumbTurn(double turn){
+        io.setTurnPosition(turn);
+    }
+    public void setTurnVelocity(double velocity){
+        io.setTurnVelocity(velocity);
+    }
+    public double getSensorSpeed(){
+        return inputs.sensorVelocity;
+    }
 }

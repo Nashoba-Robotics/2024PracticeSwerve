@@ -18,12 +18,19 @@ public interface ModuleIO {
         public double turnVoltage = 0; // Volts
         public double turnStatorCurrent = 0; // Amps
         public double turnSupplyCurrent = 0; // Amps
+        public double sensorVelocity = 0; //Rot/s
     }
 
     public default void updateInputs(ModuleIOInputs inputs) {}
 
     public default void setMoveVelocity(double velocity) {}
     public default void setTurnPosition(double position) {}
+    public default void setTurnVelocity(double velocity) {}
+    
+    public default void setkF(double kF) {}
+    public default void setkP(double kP) {}
+    public default void setkD(double kD) {}
+
 
     public default void assignTurnPosition(double position) {}
 

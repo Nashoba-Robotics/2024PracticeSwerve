@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ModuleTestCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.drive.SwerveDriveSubsystem;
 import frc.robot.subsystems.joystick.JoystickSubsystem;
@@ -59,17 +60,19 @@ public class RobotContainer {
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     
-    zeroGyroButton.onTrue(new InstantCommand(() -> {
-      SwerveDriveSubsystem.getInstance().setGyro(0);
-      Pose2d pose = new Pose2d(SwerveDriveSubsystem.getInstance().getPose().getTranslation(), Rotation2d.fromDegrees(0));
-      SwerveDriveSubsystem.getInstance().resetOdometry(pose);
+    // zeroGyroButton.onTrue(new InstantCommand(() -> {
+    //   SwerveDriveSubsystem.getInstance().setGyro(0);
+    //   Pose2d pose = new Pose2d(SwerveDriveSubsystem.getInstance().getPose().getTranslation(), Rotation2d.fromDegrees(0));
+    //   SwerveDriveSubsystem.getInstance().resetOdometry(pose);
 
-      SmartDashboard.putBoolean("Pressed", true);
-    }, SwerveDriveSubsystem.getInstance()));
+    //   SmartDashboard.putBoolean("Pressed", true);
+    // }, SwerveDriveSubsystem.getInstance()));
 
-    zeroGyroButton.onFalse(new InstantCommand(() -> {
-      SmartDashboard.putBoolean("Pressed", false);
-    }));
+    // zeroGyroButton.onFalse(new InstantCommand(() -> {
+    //   SmartDashboard.putBoolean("Pressed", false);
+    // }));
+
+    SmartDashboard.putData(new ModuleTestCommand());
   }
 
   /**

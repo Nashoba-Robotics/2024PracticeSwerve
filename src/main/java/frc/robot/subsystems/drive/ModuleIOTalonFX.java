@@ -28,6 +28,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     private TalonFXConfigurator turnConfigurator;
     private TalonFXConfiguration turnConfig;
     private MotionMagicDutyCycle turnControl;
+    private VelocityDutyCycle turnVelocityControl;
 
     private CANcoder sensor;
     private CANcoderConfigurator sensorConfigurator;
@@ -51,6 +52,9 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         turnControl = new MotionMagicDutyCycle(offset);
         turnControl.UpdateFreqHz = 50;
+        
+        turnVelocityControl = new VelocityDutyCycle(0);
+        turnVelocityControl.Slot = 0;
 
         sensor = new CANcoder(sensorPort);
         sensorConfigurator = sensor.getConfigurator();
@@ -58,7 +62,8 @@ public class ModuleIOTalonFX implements ModuleIO {
 
 
         config();
-        configOffset(offset);
+        // configOffset(offset);
+        configRemoteCancoder(sensorPort, offset);
     }
 
     public void config(){
@@ -86,7 +91,6 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnConfig.Audio.BeepOnBoot = true;
         turnConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0;
         turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        turnConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         turnConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         turnConfig.Slot0.kV = Constants.Swerve.TURN_KF;
         turnConfig.Slot0.kP = Constants.Swerve.TURN_KP;
@@ -101,11 +105,22 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnConfig.CurrentLimits.SupplyCurrentLimit = 80;
         turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         turnConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        turnConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         turnConfigurator.apply(turnConfig);
+        
 
         sensorConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
         sensorConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         sensorConfigurator.apply(sensorConfig);
+    }
+
+    public void configRemoteCancoder(int cancoderID, double offset){
+        turnConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        turnConfig.Feedback.FeedbackRemoteSensorID = cancoderID;
+        turnConfig.Feedback.SensorToMechanismRatio = 1;
+        turnConfig.Feedback.RotorToSensorRatio = Constants.Swerve.TURN_GEAR_RATIO;
+        turnConfig.Feedback.FeedbackRotorOffset = offset;
+        turnConfigurator.apply(turnConfig);
     }
 
     public void configOffset(double offset){
@@ -127,6 +142,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         inputs.turnVoltage = turnMotor.getSupplyVoltage().getValue();
         inputs.turnStatorCurrent = turnMotor.getStatorCurrent().getValue();
         inputs.turnSupplyCurrent = turnMotor.getSupplyCurrent().getValue();
+        inputs.sensorVelocity = sensor.getVelocity().getValue();
     }
 
     public void setMoveVelocity(double velocity) {
@@ -139,8 +155,27 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnMotor.setControl(turnControl);
     }
 
+    public void setTurnVelocity(double velocity){
+        turnVelocityControl.Velocity = velocity;
+        turnMotor.setControl(turnVelocityControl);
+    }
+
     public void assignTurnPosition(double position) {
         turnMotor.setRotorPosition(position);
+    }
+
+    public void setkF(double kF){
+        turnConfig.Slot0.kV = kF;
+        turnConfigurator.apply(turnConfig);
+    }
+
+    public void setkP(double kP){
+        turnConfig.Slot0.kP = kP;
+        turnConfigurator.apply(turnConfig);
+    }
+    public void setkD(double kD){
+        turnConfig.Slot0.kD = kD;
+        turnConfigurator.apply(turnConfig);
     }
 
 }

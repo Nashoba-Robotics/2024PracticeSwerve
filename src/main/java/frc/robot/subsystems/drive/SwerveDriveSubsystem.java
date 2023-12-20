@@ -50,7 +50,6 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     }
     
     private static SwerveDriveSubsystem instance;
-
     public static SwerveDriveSubsystem getInstance() {
         if(instance == null) {
             instance = new SwerveDriveSubsystem();
@@ -60,6 +59,9 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
     private double setAngle = 0;
 
+    /*
+     * @param {double} angle - Angle to set the motor to in radians
+     */
     public void turnModulesToAngle(double angle) {
         setAngle = NRUnits.constrainRad(angle - getGyroAngle());
         for(Module module : modules) {
@@ -67,6 +69,9 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         }
     }
 
+    /*
+     * @return Whether or not every module has reached the target angle
+     */
     public boolean atTurnPos() {
         boolean atPos = true;
         for(Module module : modules) {
