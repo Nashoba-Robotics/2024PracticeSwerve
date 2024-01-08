@@ -18,34 +18,36 @@ public class ModuleTestCommand extends CommandBase{
     double kD, lastkD;
 
     DataLog log;
-    DoubleLogEntry angleEntry;
+    DoubleLogEntry velocityEntry;
+    DoubleLogEntry targetEntry;
 
     public ModuleTestCommand(){
-        double offset = 0;
-        mod = Robot.mod;
+        
     }
 
     @Override
     public void initialize() {
-        SmartDashboard.putNumber("kF", 0);
-        SmartDashboard.putNumber("kP", 0);
-        SmartDashboard.putNumber("kD", 0);
-        SmartDashboard.putNumber("Turn Angle", 0);
-        
-        kF = 0;
-        kP = 0;
-        kD = 0;
+        kF = 0.073; //Mod1: 0.075
+        kP = 0.09;  //Mod2: 0.09
+        kD = 0;   //Mod3: 0.0001
 
-        lastkF = 0;
-        lastkP = 0;
-        lastkD = 0;
+        lastkF = kF;
+        lastkP = kP;
+        lastkD = kD;
 
         DataLogManager.start();
         log = DataLogManager.getLog();
-        angleEntry = new DoubleLogEntry(log, "Angle");
-        mod.setkF(0);
-        mod.setkP(0);
-        mod.setkD(0);
+        velocityEntry = new DoubleLogEntry(log, "Velocity");
+        targetEntry = new DoubleLogEntry(log, "Target");
+
+        SmartDashboard.putNumber("kF", kF);
+        SmartDashboard.putNumber("kP", kP);
+        SmartDashboard.putNumber("kD", kD);
+        SmartDashboard.putNumber("Velocity", 0);
+
+        mod.setkF(kF);
+        mod.setkP(kP);
+        mod.setkD(kD);
 
     }
 
@@ -68,9 +70,18 @@ public class ModuleTestCommand extends CommandBase{
         }
 
         //Input in degrees
-        double turn = SmartDashboard.getNumber("Turn Angle", 0);
-        mod.setTurnVelocity(turn);;
+        double velocity = SmartDashboard.getNumber("Velocity", 0);
+        mod.setMoveVelocity(velocity);
 
-        angleEntry.append(mod.getTurnVelocity()); //Output in degrees
+        velocityEntry.append(mod.getMoveVelocity()); //Output in degrees
+        targetEntry.append(velocity);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        // velocityEntry.finish();
+        // targetEntry.finish();
+        // log.close();
+        mod.setMoveVelocity(0);
     }
 }

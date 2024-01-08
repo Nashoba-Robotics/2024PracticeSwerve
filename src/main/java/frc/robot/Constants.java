@@ -61,7 +61,7 @@ public final class Constants {
 
     public static final double WHEELRADIUS = Units.inchesToMeters(1.925);
     
-    public static final double MAX_NATIVE_VELOCITY = 103;
+    public static final double MAX_NATIVE_VELOCITY = 12.29;
 
     public static final int FRONT_RIGHT_TURN_PORT = 4;
     public static final int FRONT_LEFT_TURN_PORT = 5;
@@ -78,9 +78,9 @@ public final class Constants {
     public static final int BACK_LEFT_SENSOR_PORT = 2;
     public static final int BACK_RIGHT_SENSOR_PORT = 3;
     
-    public static final double FRONT_RIGHT_OFFSET_NU = -0.609619 + 0.5;
-    public static final double FRONT_LEFT_OFFSET_NU = -0.535400 + 0.5;
-    public static final double BACK_LEFT_OFFSET_NU = -0.447266+0.5;
+    public static final double FRONT_RIGHT_OFFSET_NU = 0.389404+0.5;
+    public static final double FRONT_LEFT_OFFSET_NU = -0.037842;
+    public static final double BACK_LEFT_OFFSET_NU = -0.445557+0.5;
     public static final double BACK_RIGHT_OFFSET_NU = -0.290527+0.5;
 
     public static final double TURN_KF = 0.01;
@@ -88,10 +88,10 @@ public final class Constants {
     public static final double TURN_KI = 0;
     public static final double TURN_KD = 0.0;
 
-    public static final double MOVE_KF = 0.01;
-    public static final double MOVE_KP = 0.01;
+    public static final double MOVE_KF = 0.075;
+    public static final double MOVE_KP = 0.09;
     public static final double MOVE_KI = 0.0;
-    public static final double MOVE_KD = 0.0;
+    public static final double MOVE_KD = 0.00009;
 
     public static final double MOD0_AFF = 0.0;
     public static final double MOD1_AFF = 0.0;

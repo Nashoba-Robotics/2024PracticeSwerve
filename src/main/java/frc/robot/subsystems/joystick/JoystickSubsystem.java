@@ -1,11 +1,10 @@
 package frc.robot.subsystems.joystick;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
 import frc.robot.lib.util.JoystickValues;
 
-public class JoystickSubsystem extends SubsystemBase{
+public class JoystickSubsystem implements OperatorInput{
     private static JoystickSubsystem instance;
 
     private CommandJoystick rightJoystick;

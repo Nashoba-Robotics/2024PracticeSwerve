@@ -48,7 +48,7 @@ public class Robot extends LoggedRobot {
 Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
 
-    // CommandScheduler.getInstance().setDefaultCommand(SwerveDriveSubsystem.getInstance(), new SwerveDriveCommand());
+    CommandScheduler.getInstance().setDefaultCommand(SwerveDriveSubsystem.getInstance(), new SwerveDriveCommand());
   }
 
   /**
@@ -59,7 +59,8 @@ Logger.getInstance().start(); // Start logging! No more data receivers, replay s
    * SmartDashboard integrated updating.
    */
 
-   public static Module mod = new Module(0, 0, 4, 0, 0, 0);
+  //  public static Module mod = new Module(1, 1, 5, 0, 0, 0);
+
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
@@ -67,7 +68,7 @@ Logger.getInstance().start(); // Start logging! No more data receivers, replay s
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    mod.periodic();
+    // mod.periodic();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

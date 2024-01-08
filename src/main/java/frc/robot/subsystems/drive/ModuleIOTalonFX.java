@@ -50,7 +50,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnConfigurator = turnMotor.getConfigurator();
         turnConfig = new TalonFXConfiguration();
 
-        turnControl = new MotionMagicDutyCycle(offset);
+        turnControl = new MotionMagicDutyCycle(0);
         turnControl.UpdateFreqHz = 50;
         
         turnVelocityControl = new VelocityDutyCycle(0);
@@ -72,6 +72,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         moveConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0;
         moveConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         moveConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        moveConfig.Feedback.SensorToMechanismRatio = Constants.Swerve.MOVE_GEAR_RATIO;
         moveConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         moveConfig.Slot0.kV = Constants.Swerve.MOVE_KF;
         moveConfig.Slot0.kS = 0;
@@ -119,8 +120,11 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnConfig.Feedback.FeedbackRemoteSensorID = cancoderID;
         turnConfig.Feedback.SensorToMechanismRatio = 1;
         turnConfig.Feedback.RotorToSensorRatio = Constants.Swerve.TURN_GEAR_RATIO;
-        turnConfig.Feedback.FeedbackRotorOffset = offset;
+        // turnConfig.Feedback.FeedbackRotorOffset = offset;
         turnConfigurator.apply(turnConfig);
+
+        sensorConfig.MagnetSensor.MagnetOffset = offset;
+        sensorConfigurator.apply(sensorConfig);
     }
 
     public void configOffset(double offset){
@@ -165,17 +169,17 @@ public class ModuleIOTalonFX implements ModuleIO {
     }
 
     public void setkF(double kF){
-        turnConfig.Slot0.kV = kF;
-        turnConfigurator.apply(turnConfig);
+        moveConfig.Slot0.kV = kF;
+        moveConfigurator.apply(moveConfig);
     }
 
     public void setkP(double kP){
-        turnConfig.Slot0.kP = kP;
-        turnConfigurator.apply(turnConfig);
+        moveConfig.Slot0.kP = kP;
+        moveConfigurator.apply(moveConfig);
     }
     public void setkD(double kD){
-        turnConfig.Slot0.kD = kD;
-        turnConfigurator.apply(turnConfig);
+        moveConfig.Slot0.kD = kD;
+        moveConfigurator.apply(moveConfig);
     }
 
 }
