@@ -4,19 +4,27 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.apriltags.AprilTagManager;
 import frc.robot.subsystems.drive.Module;
 import frc.robot.subsystems.drive.SwerveDriveSubsystem;
+
+import frc.robot.RobotContainer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -106,7 +114,20 @@ Logger.getInstance().start(); // Start logging! No more data receivers, replay s
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    try {
+            Optional<EstimatedRobotPose> pos = AprilTagManager.getInstance().getEstimatedGlobalPose();
+            SmartDashboard.putBoolean("Has target", AprilTagManager.getInstance().hasTargets());
+            if(pos.isPresent()) {
+                EstimatedRobotPose estimatedPos = pos.get();
+                SmartDashboard.putNumber("X", estimatedPos.estimatedPose.getX());
+
+            }
+
+        } catch (IOException e) {
+            SmartDashboard.putBoolean("Threw", true);
+        }
+  }
 
   @Override
   public void testInit() {
